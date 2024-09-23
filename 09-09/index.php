@@ -71,7 +71,4 @@ foreach ($shifts as $shift) {
     echo implode(', ', $assigned_employees) . "<br><br>";
     echo "<br>";
 }
-
-
-
 ?>
