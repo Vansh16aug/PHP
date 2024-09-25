@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="get">
+    <form action="" method="GET">
     Enter the name : <input type="text" name="name" placeholder="Enter the name" required><br><br>
     Enetr the Age : <input type="text" name="age" placeholder="Enter the age" required ><br><br>
     Enter the email : <input type="text" name="email" placeholder="ENter the emial" required><br><br>
