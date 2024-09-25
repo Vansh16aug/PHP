@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin: 20px 0;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Voting System</h2>
+
+
+        <!-- Form to add a candidate -->
+        <form action="index.php" method="post">
+            <h3>Add Candidate</h3>
+            <input type="text" name="candidate_name" placeholder="Enter Candidate Name" required>
+            <input type="submit" name="add_candidate" value="Add Candidate">
+        </form>
+
+        <!-- Form to cast a vote -->
+        <form action="index.php" method="post">
+            <h3>Cast Your Vote</h3>
+            <select name="candidate_vote" required>
+                <option value="">Select a Candidate</option>
+                <?php
+                // Display candidates in the dropdown
+                foreach ($candidates as $candidate => $votes) {
+                    echo "<option value='$candidate'>$candidate</option>";
+                }
+                ?>
+            </select>
+            <input type="submit" name="vote" value="Vote">
+        </form>
+
+        <!-- Display Vote Counts -->
+        <div class="results">
+            <h3>Current Vote Counts</h3>
+            <?php
+            // Display current vote counts
+            if (!empty($candidates)) {
+                echo "<ul>";
+                foreach ($candidates as $candidate => $votes) {
+                    echo "<li><strong>$candidate:</strong> $votes votes</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "<p>No candidates available.</p>";
+            }
+            ?>
+        </div>
+
+        <!-- Declare the Winner -->
+        <div class="results">
+            <h3>Declare Winner</h3>
+            <?php
+            if (!empty($candidates)) {
+                // Find the candidate with the highest votes
+                $maxVotes = max($candidates);
+                $winners = array_keys($candidates, $maxVotes); // In case of a tie
+
+                if ($maxVotes > 0) {
+                    echo "<p>The current winner(s): <strong>" . implode(", ", $winners) . "</strong> with $maxVotes votes!</p>";
+                } else {
+                    echo "<p>No votes have been cast yet.</p>";
+                }
+            }
+            ?>
+        </div>
+    </div>
+</body>
+</html>

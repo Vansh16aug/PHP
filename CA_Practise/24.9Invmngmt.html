@@ -1,0 +1,120 @@
+<html>
+<head>
+    <title>Inventory Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .form-container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Inventory Management System</h1>
+
+<div class="form-container">
+    <form method="post" action="inventory.php">//empty means our php is enclosed in the ame file
+        <h2>Add New Item</h2>
+        <input type="text" name="item" placeholder="Item Name" required>
+        <input type="number" name="quantity" placeholder="Quantity" min="1" required>
+        <input type="number" name="price" placeholder="Price" step="0.01" required>
+        <input type="hidden" name="action" value="add">
+        <input type="submit" value="Add Item">
+    </form>
+
+    <form method="post">
+        <h2>Update Item Quantity</h2>
+        <input type="text" name="item" placeholder="Item Name" required>
+        <input type="number" name="quantity" placeholder="New Quantity" min="1" required>
+        <input type="hidden" name="action" value="update">
+        <input type="submit" value="Update Quantity">
+    </form>
+
+    <form method="post">
+        <h2>Remove Item</h2>
+        <input type="text" name="item" placeholder="Item Name" required>
+        <input type="hidden" name="action" value="remove">
+        <input type="submit" value="Remove Item">
+    </form>
+
+    <form method="post">
+        <h2>Calculate Total Value</h2>
+        <input type="hidden" name="action" value="total">
+        <input type="submit" value="Calculate Total"  name="action">
+    </form>
+</div>
+<?php
+// Initialize the inventory
+$inventory = [
+    'Zen' => ['quantity' => 10, 'price' => 50],
+    'Maruti' => ['quantity' => 5, 'price' => 200],
+    'Fiat' => ['quantity' => 7, 'price' => 150]
+];
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $action = $_POST['action'];
+
+    switch ($action) {
+        case 'add':
+            $itemName = $_POST['item'];
+            $quantity = intval($_POST['quantity']);
+            $price = floatval($_POST['price']);
+            $inventory[$itemName] = ['quantity' => $quantity, 'price' => $price];
+            break;
+
+        case 'update':
+            $itemName = $_POST['item'];
+            $quantity = intval($_POST['quantity']);
+            if (isset($inventory[$itemName])) { //the value of item is not null
+                $inventory[$itemName]['quantity'] = $quantity;
+            } else {
+                echo "Item not found.";
+            }
+            break;
+
+        case 'remove':
+            $itemName = $_POST['item'];
+            if (isset($inventory[$itemName])) {
+                unset($inventory[$itemName]);
+            } else {
+                echo "Item not found.";
+            }
+            break;
+
+        case 'total':
+            $totalValue = 0;
+            foreach ($inventory as $item => $details) {
+                $totalValue += $details['quantity'] * $details['price'];
+            }
+            echo "<h2>Total Inventory Value: \${$totalValue}</h2>";
+            break;
+
+        default:
+            echo "Invalid action.";
+            break;
+    }
+
+    // Print updated inventory after each operation
+    printInventory($inventory);
+}
+
+// Function to print the inventory
+function printInventory($inventory) {
+    echo "<h2>Current Inventory:</h2>";
+    if (empty($inventory)) {
+        echo "The inventory is empty.";
+    } else {
+        echo "<ul>";
+        foreach ($inventory as $item => $details) {
+            echo "<li>$item: Quantity = {$details['quantity']}, Price = \${$details['price']}</li>";
+        }
+        echo "</ul>";
+    }
+}
+?>
+</body>
+</html>
