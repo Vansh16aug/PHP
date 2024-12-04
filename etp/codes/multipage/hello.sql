@@ -1,0 +1,9 @@
+CREATE DATABASE multipage;
+
+USE multipage;
+
+CREATE TABLE multipage1 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
